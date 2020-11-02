@@ -1,5 +1,6 @@
 /* eslint-disable import/first */
-require("dotenv").config();
+import * as dotenv from "dotenv";
+dotenv.config();
 
 import shortid from "shortid";
 import faker from "faker";

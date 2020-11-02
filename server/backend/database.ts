@@ -108,6 +108,28 @@ export const seedDatabase = () => {
   return;
 };
 
+export const postEvent = (newEvent: Event) => db.get(EVENT_TABLE).push(newEvent).write();
+
+export const getAllEvents = () => db.get(EVENT_TABLE).value();
+
+export const sortEvents = (events: Event[], direction: string): Event[] => {
+  console.log(direction);
+  return direction === "-date"
+    ? events.sort((a: Event, b: Event): number => b.date - a.date)
+    : events.sort((a: Event, b: Event): number => a.date - b.date);
+};
+
+export const searchValue = (event: Event | Geolocation | Location, search: string): boolean => {
+  if(Object.values(event).some(value => value.toString().match(new RegExp(search, 'gi')))) return true;
+  for (const [, value] of Object.entries(event)) {
+    if (typeof value === 'object') {
+      searchValue(value, search);
+    }
+  }
+  return false;
+};
+
+
 export const getAllUsers = () => db.get(USER_TABLE).value();
 
 export const getAllPublicTransactions = () =>
