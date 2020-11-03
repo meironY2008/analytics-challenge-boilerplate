@@ -21,7 +21,7 @@ import {
   countBy,
   groupBy,
 } from "lodash/fp";
-import { isWithinInterval } from "date-fns";
+import { formatDistance, isWithinInterval } from "date-fns";
 import low from "lowdb";
 import FileSync from "lowdb/adapters/FileSync";
 import shortid from "shortid";
@@ -49,7 +49,7 @@ import {
   NotificationResponseItem,
   TransactionQueryPayload,
   DefaultPrivacyLevel,
-  Event
+  Event,
 } from "../../client/src/models";
 import Fuse from "fuse.js";
 import {
@@ -69,7 +69,6 @@ import {
   isCommentNotification,
 } from "../../client/src/utils/transactionUtils";
 import { DbSchema } from "../../client/src/models/db-schema";
-
 
 export type TDatabase = {
   users: User[];
@@ -120,15 +119,40 @@ export const sortEvents = (events: Event[], direction: string): Event[] => {
 };
 
 export const searchValue = (event: Event | Geolocation | Location, search: string): boolean => {
-  if(Object.values(event).some(value => value.toString().match(new RegExp(search, 'gi')))) return true;
+  if (Object.values(event).some((value) => value.toString().match(new RegExp(search, "gi"))))
+    return true;
   for (const [, value] of Object.entries(event)) {
-    if (typeof value === 'object') {
+    if (typeof value === "object") {
       searchValue(value, search);
     }
   }
   return false;
 };
 
+export const countDates = (events: Event[]): any => {
+  const formatDate = (ms: number): string => {
+    let day = new Date(ms).getDate();
+    let month = new Date(ms).getMonth() + 1;
+    let year = new Date(ms).getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  return groupBy((event) => {
+    return formatDate(event.date);
+  }, events);
+};
+
+export const countHours = (events: Event[]): any => {
+  const formatHour = (ms: number): string => {
+    let hour = new Date(ms).getHours();
+    if (hour < 10) return `0${hour}:00`;
+    return `${hour}:00`;
+  };
+
+  return groupBy((event) => {
+    return formatHour(event.date);
+  }, events);
+};
 
 export const getAllUsers = () => db.get(USER_TABLE).value();
 
@@ -884,6 +908,5 @@ export const getTransactionsBy = (key: string, value: string) =>
 
 /* istanbul ignore next */
 export const getTransactionsByUserId = (userId: string) => getTransactionsBy("receiverId", userId);
-
 
 export default db;
