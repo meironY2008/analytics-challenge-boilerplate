@@ -16,33 +16,6 @@ interface hourObject {
   line2: number;
 }
 
-const template: hourData[] = [
-  { hour: "00:00", count: 0 },
-  { hour: "01:00", count: 0 },
-  { hour: "02:00", count: 0 },
-  { hour: "03:00", count: 0 },
-  { hour: "04:00", count: 0 },
-  { hour: "05:00", count: 0 },
-  { hour: "06:00", count: 0 },
-  { hour: "07:00", count: 0 },
-  { hour: "08:00", count: 0 },
-  { hour: "09:00", count: 0 },
-  { hour: "10:00", count: 0 },
-  { hour: "11:00", count: 0 },
-  { hour: "12:00", count: 0 },
-  { hour: "13:00", count: 0 },
-  { hour: "14:00", count: 0 },
-  { hour: "15:00", count: 0 },
-  { hour: "16:00", count: 0 },
-  { hour: "17:00", count: 0 },
-  { hour: "18:00", count: 0 },
-  { hour: "19:00", count: 0 },
-  { hour: "20:00", count: 0 },
-  { hour: "21:00", count: 0 },
-  { hour: "22:00", count: 0 },
-  { hour: "23:00", count: 0 },
-];
-
 const SessionsByHours = (props: Props) => {
   const { hoursOffset } = props;
 
@@ -77,7 +50,7 @@ const SessionsByHours = (props: Props) => {
       newArr.push({
         hour: newDataArray[i].hour,
         line1: newDataArray[i].count,
-        line2: newDataArray2[i] ? newDataArray2[i].count: 0,
+        line2: newDataArray2[i] ? newDataArray2[i].count : 0
       });
     }
     setChartData(newArr);

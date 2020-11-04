@@ -59,7 +59,7 @@ router.get("/all-filtered", (req: Request, res: Response) => {
   if (browser) sortedArray = sortedArray.filter((event) => browser === event.browser);
   if (search) sortedArray = sortedArray.filter((event) => searchValue(event, search));
   if (offset) {
-    more = true;
+    more = offset < sortedArray.length;
     sortedArray = sortedArray.slice(0, offset);
   }
   res.status(200).json({ events: sortedArray, more });
