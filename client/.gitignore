@@ -14,6 +14,7 @@
 # misc
 .DS_Store
 .idea
+.env.local
 
 npm-debug.log*
 yarn-debug.log*

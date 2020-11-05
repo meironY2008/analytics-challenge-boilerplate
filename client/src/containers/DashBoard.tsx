@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Interpreter } from "xstate";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import SessionsByDays from "../components/charts/SessionsByDays";
 import SessionsByHours from "../components/charts/SessionsByHours";
 import EventLog from "../components/charts/EventLog";
+import EventMap from "../components/charts/EventMap";
 
 export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
@@ -17,13 +18,33 @@ const DashBoard: React.FC = () => {
   const [typeValue, setTypeValue] = useState<string>('');
   const [browserValue, setBrowserValue] = useState<string>('');
 
+  const searchRef = useRef<any>();
+  const typeRef = useRef<any>();
+  const sortRef = useRef<any>();
+  const browserRef = useRef<any>();
+
   const calculateDateDiff = (date: Date): number => {
     const diffTime: number = Math.abs(new Date().getTime() - date.getTime());
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) - 1;
   };
 
+  const clearOptions = () => {
+    setSearchValue('');
+    setSortValue('-date');
+    setTypeValue('');
+    setBrowserValue('');
+    searchRef.current.value = '';
+    typeRef.current.value = '';
+    sortRef.current.value = '';
+    browserRef.current.value = '';
+  }
+
   return (
     <>
+      {/* container for map */}
+      <div>
+        <EventMap />
+      </div>
       <div>
         {" "}
         {/* container for session by days */}
@@ -61,15 +82,15 @@ const DashBoard: React.FC = () => {
       <div>
         {" "}
         {/* container for event log */}
-        <input placeholder='Search...' onChange={(e) => setSearchValue(e.target.value)} />
-        <select onChange={(e) => setSortValue(e.target.value)}>
+        <input placeholder='Search...' ref={searchRef} onChange={(e) => setSearchValue(e.target.value)} />
+        <select ref={sortRef} onChange={(e) => setSortValue(e.target.value)}>
           <option value="" disabled selected hidden>
             Sort...
           </option>
           <option value="-date">Newest</option>
           <option value="%2Bdate">Oldest</option>
         </select>
-        <select onChange={(e) => setTypeValue(e.target.value)}>
+        <select ref={typeRef} onChange={(e) => setTypeValue(e.target.value)}>
           <option value="" disabled selected hidden>
             Type...
           </option>
@@ -81,7 +102,7 @@ const DashBoard: React.FC = () => {
             )
           })}
         </select>
-        <select onChange={(e) => setBrowserValue(e.target.value)}>
+        <select ref={browserRef} onChange={(e) => setBrowserValue(e.target.value)}>
           <option value="" disabled selected hidden>
             Browser...
           </option>
@@ -93,12 +114,7 @@ const DashBoard: React.FC = () => {
             )
           })}
         </select>
-        <button onClick={()=>{
-          setBrowserValue("");
-          setTypeValue("");
-          setSearchValue("");
-          setSortValue("-date");
-        }}>clear</button>
+        <button onClick={() => clearOptions()}>Clear</button>
         <EventLog sorting={sortValue} type={typeValue} browser={browserValue} search={searchValue} />
       </div>
     </>
