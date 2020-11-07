@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { GoogleMap, LoadScript, Marker, MarkerClusterer } from "@react-google-maps/api";
 import { Event } from "../../models";
 
-interface Props {}
+interface Props {
+  mapHeight: string;
+  mapWidth: string;
+}
 
 const EventMap = (props: Props) => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -14,8 +17,8 @@ const EventMap = (props: Props) => {
   }, []);
 
   const mapStyles = {
-    height: "65vh",
-    width: "50vw",
+    height: props.mapHeight,
+    width: props.mapWidth
   };
 
   const options = {
@@ -29,7 +32,7 @@ const EventMap = (props: Props) => {
 
   const defaultCenter = {
     lat: 30,
-    lng: 5,
+    lng: 90,
   };
 
   const mapRef = useRef();
@@ -43,15 +46,15 @@ const EventMap = (props: Props) => {
         <GoogleMap
           mapContainerStyle={mapStyles}
           center={defaultCenter}
-          zoom={1.4}
+          zoom={1.9}
           options={options}
           onLoad={onMapLoad}
         >
           <MarkerClusterer options={clusterOptions!}>
             {(clusterer) =>
-              events.map((event) => (
+              events.map((event, index) => (
                 <Marker
-                  key={event._id}
+                  key={event._id + index}
                   position={{
                     lat: event.geolocation.location.lat,
                     lng: event.geolocation.location.lng,

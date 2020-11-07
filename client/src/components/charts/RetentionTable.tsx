@@ -24,12 +24,24 @@ const RetentionTable = (props: Props) => {
     const { start, end, weeklyRetention, registrationWeek, newUsers } = data;
     return (
       <tr key={start}>
-        <td>
+        <td style={{ padding: "5px", backgroundColor: "#D4D2EC" }}>
           {start} - {end} <br />
           <sub>{newUsers} users</sub>
         </td>
         {weeklyRetention.map((week) => (
-          <td>
+          <td
+            style={{
+              padding: "5px",
+              backgroundColor:
+                week >= 20 && week < 40
+                  ? "#B1B3DF"
+                  : week >= 40 && week < 60
+                  ? "#755BCF"
+                  : week >= 60 && week < 80
+                  ? "#5427DA"
+                  : "#2F2692",
+            }}
+          >
             {week}% <br />
             <sub>{Math.round((newUsers * week) / 100)} new users</sub>
           </td>
@@ -50,14 +62,30 @@ const RetentionTable = (props: Props) => {
     });
     return (
       <tr>
-        <td>
+        <td style={{ padding: "5px", fontWeight: "bold", backgroundColor: "#D4D2EC" }}>
           All Users <br />
           <sub>{sumUsers}</sub>
         </td>
         {sumWeek.map((week) => {
           return (
-            <td>
-              {!Math.round(week / sumUsers * 100) ? 0 : Math.round(week / sumUsers * 100)}% <br />
+            <td
+              style={{
+                padding: "5px",
+                backgroundColor:
+                  Math.round((week / sumUsers) * 100) >= 20 &&
+                  Math.round((week / sumUsers) * 100) < 40
+                    ? "#B1B3DF"
+                    : Math.round((week / sumUsers) * 100) >= 40 &&
+                      Math.round((week / sumUsers) * 100) < 60
+                    ? "#755BCF"
+                    : Math.round((week / sumUsers) * 100) >= 60 &&
+                      Math.round((week / sumUsers) * 100) < 80
+                    ? "#5427DA"
+                    : "#2F2692",
+              }}
+            >
+              {!Math.round((week / sumUsers) * 100) ? 0 : Math.round((week / sumUsers) * 100)}%{" "}
+              <br />
               <sub>{week} users</sub>
             </td>
           );
@@ -67,25 +95,23 @@ const RetentionTable = (props: Props) => {
   };
 
   return (
-    <div>
-      <table>
-        <tr key="Headers">
-          {retentionArr &&
-            retentionArr.map((data, index) => {
-              return index === 0 ? (
-                <>
-                  <th key={`header${index}`}>Counts</th>
-                  <th key={`week${index}`}>Week {index}</th>
-                </>
-              ) : (
+    <table style={{ width: "100%", height: "100%" }}>
+      <tr key="Headers">
+        {retentionArr &&
+          retentionArr.map((data, index) => {
+            return index === 0 ? (
+              <>
+                <th key={`header${index}`}>Counts</th>
                 <th key={`week${index}`}>Week {index}</th>
-              );
-            })}
-        </tr>
-        {makeSumRow(retentionArr)}
-        {retentionArr.map((data) => makeDataRow(data))}
-      </table>
-    </div>
+              </>
+            ) : (
+              <th key={`week${index}`}>Week {index}</th>
+            );
+          })}
+      </tr>
+      {makeSumRow(retentionArr)}
+      {retentionArr.map((data) => makeDataRow(data))}
+    </table>
   );
 };
 

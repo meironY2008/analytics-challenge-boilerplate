@@ -47,6 +47,7 @@ describe("main test", () => {
 
   it("can get unique sessions count by day", async () => {
     const { body: sessionsByDays } = await request(app).get("/events/by-days/0").expect(200)
+    console.log(sessionsByDays);
 
     expect(sessionsByDays.length).toBe(7)
     expect(sessionsByDays.reduce((sum: number, day: {date: string; count: number}) => sum += day.count, 0)).toBe(145
@@ -54,7 +55,7 @@ describe("main test", () => {
     expect(sessionsByDays[0].count).toBe(19);
 
     const { body: sessionsByDays2 } = await request(app).get("/events/by-days/7").expect(200)
-
+    console.log(sessionsByDays2);
     expect(sessionsByDays2.length).toBe(7)
     expect(sessionsByDays2.reduce((sum: number, day: {date: string; count: number}) => sum += day.count, 0)).toBe(78)
     expect(sessionsByDays2[0].count).toBe(11);
@@ -64,6 +65,7 @@ describe("main test", () => {
 
   it("can get unique sessions count by hour", async () => {
     const { body: sessionsByHours } = await request(app).get("/events/by-hours/0").expect(200)
+
     expect(sessionsByHours.length).toBe(24)
     expect(sessionsByHours.reduce((sum: number, day: {date: string; count: number}) => sum += day.count, 0)).toBe(7)
 
@@ -141,7 +143,10 @@ describe("main test", () => {
 
   it("can post new event", async () => {
     await request(app).post("/events").send(mockData.events[0]).expect(200);
-    const { body: allEvents2 } = await request(app).get("/events/all").expect(200);
+    const { body: allEvents2 } = await request(app).get("/events/all")
+    .expect(({status})=>{
+      if(status!==200 && status !== 201) throw new Error(`Expected Status to be '200 OK' Or '201 Created', instead received ${status}`)
+    });
     expect(allEvents2.length).toBe(301);
     expect(allEvents2[300].date).toBe(mockData.events[0].date);
     expect(allEvents2[300].os).toBe(mockData.events[0].os);

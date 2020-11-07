@@ -119,7 +119,8 @@ export const sortEvents = (events: Event[], direction: string): Event[] => {
 };
 
 export const searchValue = (event: Event | Geolocation | Location, search: string): boolean => {
-  if (Object.values(event).some((value) => value.toString().match(new RegExp(search, "gi"))))
+  // console.log("AHAHAHAHAHA", Object.keys(event));
+  if (Object.entries(event).some(([key, value]) => key !== 'date' && value.toString().match(new RegExp(search, "gi"))))
     return true;
   for (const [, value] of Object.entries(event)) {
     if (typeof value === "object") {
