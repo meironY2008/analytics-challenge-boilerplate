@@ -33,13 +33,17 @@ const RetentionTable = (props: Props) => {
             style={{
               padding: "5px",
               backgroundColor:
-                week >= 20 && week < 40
+                week >= 0 && week < 20
+                  ? "#D4D2EC"
+                  : week >= 20 && week < 40
                   ? "#B1B3DF"
                   : week >= 40 && week < 60
                   ? "#755BCF"
                   : week >= 60 && week < 80
                   ? "#5427DA"
-                  : "#2F2692",
+                  : week >= 80 && week < 100
+                  ? "#2F2692"
+                  : "gold",
             }}
           >
             {week}% <br />
@@ -72,8 +76,11 @@ const RetentionTable = (props: Props) => {
               style={{
                 padding: "5px",
                 backgroundColor:
-                  Math.round((week / sumUsers) * 100) >= 20 &&
-                  Math.round((week / sumUsers) * 100) < 40
+                  Math.round((week / sumUsers) * 100) >= 0 &&
+                  Math.round((week / sumUsers) * 100) < 20
+                    ? "#D4D2EC"
+                    : Math.round((week / sumUsers) * 100) >= 20 &&
+                      Math.round((week / sumUsers) * 100) < 40
                     ? "#B1B3DF"
                     : Math.round((week / sumUsers) * 100) >= 40 &&
                       Math.round((week / sumUsers) * 100) < 60
@@ -81,7 +88,10 @@ const RetentionTable = (props: Props) => {
                     : Math.round((week / sumUsers) * 100) >= 60 &&
                       Math.round((week / sumUsers) * 100) < 80
                     ? "#5427DA"
-                    : "#2F2692",
+                    : Math.round((week / sumUsers) * 100) >= 80 &&
+                      Math.round((week / sumUsers) * 100) < 100
+                    ? "#2F2692"
+                    : "gold",
               }}
             >
               {!Math.round((week / sumUsers) * 100) ? 0 : Math.round((week / sumUsers) * 100)}%{" "}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Area, AreaChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 interface Props {
   hoursOffset: number[];
@@ -33,13 +33,13 @@ const SessionsByHours = (props: Props) => {
     fetch(`http://localhost:3001/events/by-hours/${hoursOffset[0]}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log("DATA ARRAY-1", res.sort(sortHours));
+        // console.log("DATA ARRAY-1", res.sort(sortHours));
         setNewDataArray(res.sort(sortHours));
       });
     fetch(`http://localhost:3001/events/by-hours/${hoursOffset[1]}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log("DATA ARRAY-2", res.sort(sortHours));
+        // console.log("DATA ARRAY-2", res.sort(sortHours));
         setNewDataArray2(res.sort(sortHours));
       });
   }, [hoursOffset]);
@@ -57,11 +57,9 @@ const SessionsByHours = (props: Props) => {
   }, [newDataArray, newDataArray2]);
 
   return (
-    <div>
+    <ResponsiveContainer width="100%" height="100%">
       {chartData && (
         <AreaChart
-          width={800}
-          height={400}
           data={chartData}
           margin={{ top: 0, right: 25, left: 60, bottom: 0 }}
         >
@@ -95,7 +93,7 @@ const SessionsByHours = (props: Props) => {
           />
         </AreaChart>
       )}
-    </div>
+    </ResponsiveContainer>
   );
 };
 

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Interpreter } from "xstate";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
 import { AuthMachineContext, AuthMachineEvents } from "../machines/authMachine";
 import { Event } from "../models";
 import styled, { createGlobalStyle, css } from "styled-components";
@@ -16,6 +18,15 @@ export interface Props {
   authService: Interpreter<AuthMachineContext, any, AuthMachineEvents, any>;
 }
 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
+}));
+
 const DashBoard: React.FC = () => {
   const weekAgoMS = new Date().setDate(new Date().getDate() - 6);
   const [daysOffset, setDaysOffset] = useState<number>(0);
@@ -31,6 +42,8 @@ const DashBoard: React.FC = () => {
   const typeRef = useRef<any>();
   const sortRef = useRef<any>();
   const browserRef = useRef<any>();
+
+  const classes = useStyles();
 
   useEffect(() => {
     fetch("http://localhost:3001/events/all")
@@ -80,7 +93,7 @@ const DashBoard: React.FC = () => {
     height: ${(props) => props.height};
     order: ${(props) => props.order};
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
   `;
 
   const Tile = styled.div<tileProps>`
@@ -88,8 +101,8 @@ const DashBoard: React.FC = () => {
     width: ${(props) => props.width};
     min-height: ${(props) => props.minHeight};
     min-width: ${(props) => props.minWidth};
-    max-height: ${props => props.maxHeight};
-    max-width: ${props => props.maxWidth};
+    max-height: ${(props) => props.maxHeight};
+    max-width: ${(props) => props.maxWidth};
     order: ${(props) => props.order};
     resize: both;
     overflow: auto;
@@ -99,20 +112,36 @@ const DashBoard: React.FC = () => {
   `;
 
   return (
-    <>
-      <Container direction="row" height="100vh" width="80vw">
+    <Paper className={classes.paper}>
+      <Container direction="row" height="100%" width="100%">
 
-        <Container order={3} direction="row" width="100%" height="100%">
+        <Container order={1} direction="row" width="100%" height="100%">
           {/* container for os-usage pie chart */}
           <ErrorBoundary>
-            <Tile order={1} minWidth="40%" minHeight="250px" width="50%" height="300px" maxWidth="50%" maxHeight="350px">
+            <Tile
+              order={1}
+              minWidth="40%"
+              minHeight="250px"
+              width="45%"
+              height="300px"
+              maxWidth="50%"
+              maxHeight="350px"
+            >
               <OSUsage allEvents={allEvents} />
             </Tile>
           </ErrorBoundary>
 
           {/* container for page-views pie chart */}
           <ErrorBoundary>
-            <Tile order={2} minWidth="40%" minHeight="250px" width="50%" height="300px" maxWidth="50%" maxHeight="350px">
+            <Tile
+              order={2}
+              minWidth="40%"
+              minHeight="250px"
+              width="45%"
+              height="300px"
+              maxWidth="50%"
+              maxHeight="350px"
+            >
               <PageViews allEvents={allEvents} />
             </Tile>
           </ErrorBoundary>
@@ -120,7 +149,16 @@ const DashBoard: React.FC = () => {
 
         {/* container for retention table */}
         <ErrorBoundary>
-          <Tile order={4} min-width="100%" min-height="100%" padding="10px">
+          <Tile
+            order={4}
+            minWidth="30%"
+            minHeight="250px"
+            width="40%"
+            height="250px"
+            maxWidth="50%"
+            maxHeight="40%"
+            padding="10px"
+          >
             <input
               key="dayZero"
               type="date"
@@ -137,8 +175,15 @@ const DashBoard: React.FC = () => {
 
         {/* container for map */}
         <ErrorBoundary>
-          <Tile order={1} width="65vw" min-height="400px" height="500px">
-            <EventMap mapHeight="100vh" mapWidth="100vw" />
+          <Tile
+            order={2}
+            minWidth="65vw"
+            width="80%"
+            minHeight="400px"
+            height="522px"
+            style={{ overflow: "hidden" }}
+          >
+            <EventMap mapHeight="520px" mapWidth="100%" />
           </Tile>
         </ErrorBoundary>
 
@@ -146,10 +191,12 @@ const DashBoard: React.FC = () => {
         <ErrorBoundary>
           <Tile
             order={5}
-            min-width="400px"
-            min-height="250px"
-            height="45%"
+            minWidth="30%"
+            minHeight="250px"
+            height="250px"
             width="40%"
+            maxWidth="50%"
+            maxHeight="40%"
             padding="10px"
           >
             <input
@@ -167,7 +214,14 @@ const DashBoard: React.FC = () => {
 
         {/* container for session by hours */}
         <ErrorBoundary>
-          <Tile order={6}>
+          <Tile order={6}
+            minWidth="30%"
+            minHeight="250px"
+            height="400px"
+            width="80%"
+            maxWidth="100%"
+            maxHeight="500px"
+            padding="10px">
             <input
               key="hoursOffset1"
               type="date"
@@ -251,7 +305,7 @@ const DashBoard: React.FC = () => {
         </ErrorBoundary>
 
       </Container>
-    </>
+    </Paper>
   );
 };
 

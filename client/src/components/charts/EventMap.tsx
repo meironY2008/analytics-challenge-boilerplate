@@ -21,9 +21,9 @@ const EventMap = (props: Props) => {
     width: props.mapWidth
   };
 
-  const options = {
-    disableDefaultUI: true,
-  };
+  // const options = {
+  //   disableDefaultUI: true,
+  // };
 
   const clusterOptions = {
     imagePath:
@@ -47,7 +47,7 @@ const EventMap = (props: Props) => {
           mapContainerStyle={mapStyles}
           center={defaultCenter}
           zoom={1.9}
-          options={options}
+          // options={options}
           onLoad={onMapLoad}
         >
           <MarkerClusterer options={clusterOptions!}>
