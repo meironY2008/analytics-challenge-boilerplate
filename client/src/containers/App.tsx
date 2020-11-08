@@ -4,6 +4,7 @@ import { useService, useMachine } from "@xstate/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 import DashBoard from "./DashBoard";
+import ErrorBoundary from './ErrorBoundary';
 import { snackbarMachine } from "../machines/snackbarMachine";
 import { notificationsMachine } from "../machines/notificationsMachine";
 import { authService } from "../machines/authMachine";
@@ -69,7 +70,9 @@ const App: React.FC = () => {
             />
           </Route>
           <Route exact path="/admin">
-            <DashBoard />
+            <ErrorBoundary>
+              <DashBoard />
+            </ErrorBoundary>
           </Route>
         </Switch>
       )}
